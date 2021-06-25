@@ -65,10 +65,12 @@ const validators = {
     return validator(value, ctx);
   },
   all: async (items, ctx) => {
+    // These are the validators that will run on every item in the array
     const checks = ctx.limit;
     return Promise.reject(
       getErrors(
         await Promise.allSettled(
+          // Run every validator on every item and return a flat array
           Object.keys(checks).flatMap((check) =>
             items.map((item) =>
               validators[check](
@@ -78,6 +80,29 @@ const validators = {
                   limit: checks[check],
                   value: item,
                   field: ctx.field,
+                  data: ctx.data,
+                })
+              )
+            )
+          )
+        )
+      )
+    );
+  },
+  field: async (objToCheck, ctx) => {
+    const fieldsToCheck = ctx.limit;
+    return Promise.reject(
+      getErrors(
+        await Promise.allSettled(
+          Object.keys(fieldsToCheck).flatMap((field) =>
+            Object.keys(fieldsToCheck[field]).map((check) =>
+              validators[check](
+                objToCheck[field],
+                getValidatorContext({
+                  validator: check,
+                  limit: fieldsToCheck[field][check],
+                  value: objToCheck[field],
+                  field,
                   data: ctx.data,
                 })
               )

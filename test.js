@@ -8,13 +8,23 @@ const data = {
   repeatPassword: "1234",
   email: "bob@bob.com",
   tags: ["1", "2", "42aaaaaaaaaaaaaaaa"],
+  address: {
+    city: "a",
+    code: "b",
+  },
 };
 
 const checks = {
-  tags: {
-    all: {
-      minLength: 2,
-      maxLength: 10,
+  address: {
+    field: {
+      city: {
+        minLength: 2,
+        maxLength: 10,
+      },
+      code: {
+        minLength: 4,
+        maxLength: 5,
+      },
     },
   },
 };
