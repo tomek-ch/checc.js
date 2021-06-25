@@ -2,7 +2,7 @@ const { validators, getValidatorContext, getErrors } = require("./setup");
 
 async function checc(data, checks) {
   // Get every field that was submitted for validation
-  return await Promise.all(
+  const arr = await Promise.all(
     Object.keys(checks).map(async (field) => {
       const currentField = checks[field];
       const value = data[field];
@@ -38,6 +38,13 @@ async function checc(data, checks) {
         ).flat(Infinity),
       };
     })
+  );
+
+  // Transform [{ field: "foo", errors: [] }]
+  // into { foo: [] }
+  return arr.reduce(
+    (result, obj) => ({ ...result, [obj.field]: obj.errors }),
+    {}
   );
 }
 
