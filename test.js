@@ -12,18 +12,13 @@ const data = {
     city: "a",
     code: "b",
   },
-  things: [{ name: "a", name: "b" }],
+  things: [{ name: "a" }, { name: "b" }],
 };
 
 const checks = {
-  things: {
-    all: {
-      field: {
-        name: {
-          minLength: 2,
-        },
-      },
-    },
+  bonus: {
+    minLength: 2,
+    optional: true,
   },
 };
 

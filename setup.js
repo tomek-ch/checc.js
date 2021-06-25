@@ -112,6 +112,7 @@ const validators = {
       )
     );
   },
+  optional: () => {},
 };
 
 module.exports = {

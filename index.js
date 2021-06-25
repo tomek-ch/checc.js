@@ -6,6 +6,15 @@ async function checc(data, checks) {
     Object.keys(checks).map(async (field) => {
       const currentField = checks[field];
       const value = data[field];
+
+      // Don't validate optional fields that are undefined
+      if (currentField.optional && value === undefined) {
+        return {
+          field,
+          errors: [],
+        };
+      }
+
       return {
         field,
         // Run all validators for a given field
