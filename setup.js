@@ -19,6 +19,7 @@ function getValidatorContext({ validator, limit, value, field, data }) {
       limit: limit[0],
       message: limit[1],
       data,
+      field,
     };
   }
   // If there is no custom message, use the default one
@@ -31,6 +32,7 @@ function getValidatorContext({ validator, limit, value, field, data }) {
         ? defaultMessage(limit, field, value)
         : defaultMessage,
     data,
+    field,
   };
 }
 
@@ -56,13 +58,34 @@ const validators = {
     if (Array.isArray(validator)) {
       // Run all of them
       return Promise.reject(
-        getErrors(
-          await Promise.allSettled(validator.map((fn) => fn(value, ctx)))
-        )
+        getErrors(Promise.allSettled(validator.map((fn) => fn(value, ctx))))
       );
     }
     // Or only one
     return validator(value, ctx);
+  },
+  all: async (items, ctx) => {
+    const checks = ctx.limit;
+    return Promise.reject(
+      getErrors(
+        await Promise.allSettled(
+          Object.keys(checks).flatMap((check) =>
+            items.map((item) =>
+              validators[check](
+                item,
+                getValidatorContext({
+                  validator: check,
+                  limit: checks[check],
+                  value: item,
+                  field: ctx.field,
+                  data: ctx.data,
+                })
+              )
+            )
+          )
+        )
+      )
+    );
   },
 };
 

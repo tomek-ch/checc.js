@@ -7,12 +7,15 @@ const data = {
   password: "123",
   repeatPassword: "1234",
   email: "bob@bob.com",
+  tags: ["1", "2", "42aaaaaaaaaaaaaaaa"],
 };
 
 const checks = {
-  repeatPassword: {
-    custom: (val, { data }) =>
-      val === data.password ? null : Promise.reject("Passwords must match"),
+  tags: {
+    all: {
+      minLength: 2,
+      maxLength: 10,
+    },
   },
 };
 
