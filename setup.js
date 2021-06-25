@@ -4,7 +4,7 @@ function getErrors(arrOfPromises) {
     .map((p) => p.reason);
 }
 
-const defaultMessages = {
+let defaultMessages = {
   minLength: (limit, field, val) =>
     `Minimum length of ${field} is ${limit}. "${val}" is too short`,
   maxLength: "Too long",
@@ -115,8 +115,25 @@ const validators = {
   optional: () => {},
 };
 
+function config(options) {
+  if (options.defaultMessages) {
+    defaultMessages = {
+      ...defaultMessages,
+      ...options.defaultMessages,
+    };
+  }
+
+  if (options.validators) {
+    Object.keys(options.validators).forEach((validatorName) => {
+      validators[validatorName] = options.validators[validatorName][0];
+      defaultMessages[validatorName] = options.validators[validatorName][1];
+    });
+  }
+}
+
 module.exports = {
   validators,
   getValidatorContext,
   getErrors,
+  config,
 };

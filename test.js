@@ -1,4 +1,20 @@
 const checc = require("./index");
+const { config } = require("./setup");
+
+config({
+  defaultMessages: {
+    minLength: "TOO SHORT",
+    maxLength: (limit, field, val) => `${val} BAD`,
+  },
+
+  validators: {
+    sameAs: [
+      (val, { limit, message }) =>
+        val === limit ? null : Promise.reject(message),
+      (limit, field, val) => `${field} is different than ${limit}`,
+    ],
+  },
+});
 
 const data = {
   username: "bob aaaaaaaaaaaa",
@@ -16,9 +32,14 @@ const data = {
 };
 
 const checks = {
-  bonus: {
+  firstName: {
     minLength: 2,
-    optional: true,
+  },
+  repeatPassword: {
+    sameAs: "password",
+  },
+  username: {
+    maxLength: 12,
   },
 };
 
