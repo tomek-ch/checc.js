@@ -14,7 +14,13 @@ async function checc(data, checks) {
             Object.keys(currentField).map((check) =>
               validators[check](
                 value,
-                getValidatorContext(check, currentField[check], value, field)
+                getValidatorContext({
+                  validator: check,
+                  limit: currentField[check],
+                  value,
+                  field,
+                  data,
+                })
               )
             )
           )

@@ -11,11 +11,15 @@ const defaultMessages = {
   pattern: "Incorrect format",
 };
 
-function getValidatorContext(validator, limit, value, field) {
+function getValidatorContext({ validator, limit, value, field, data }) {
   // Check if custom message was provided
   // And if it is not an array of custom validators
   if (Array.isArray(limit) && validator !== "custom") {
-    return { limit: limit[0], message: limit[1] };
+    return {
+      limit: limit[0],
+      message: limit[1],
+      data,
+    };
   }
   // If there is no custom message, use the default one
   const defaultMessage = defaultMessages[validator];
@@ -26,6 +30,7 @@ function getValidatorContext(validator, limit, value, field) {
       typeof defaultMessage === "function"
         ? defaultMessage(limit, field, value)
         : defaultMessage,
+    data,
   };
 }
 
