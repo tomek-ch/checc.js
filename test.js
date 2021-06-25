@@ -12,18 +12,16 @@ const data = {
     city: "a",
     code: "b",
   },
+  things: [{ name: "a", name: "b" }],
 };
 
 const checks = {
-  address: {
-    field: {
-      city: {
-        minLength: 2,
-        maxLength: 10,
-      },
-      code: {
-        minLength: 4,
-        maxLength: 5,
+  things: {
+    all: {
+      field: {
+        name: {
+          minLength: 2,
+        },
       },
     },
   },

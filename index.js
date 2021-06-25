@@ -24,8 +24,9 @@ async function checc(data, checks) {
               )
             )
           )
-          // Handle nested arrays of custom validator messages
-        ).flat(),
+          // Handle nested arrays of custom validator
+          // and nested object messages
+        ).flat(Infinity),
       };
     })
   );
