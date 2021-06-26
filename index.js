@@ -15,6 +15,25 @@ async function checc(data, checks) {
         };
       }
 
+      // If it is an object that is being validated,
+      // using the field validator,
+      // return an error object from the validator
+      // instead of an array of errors
+      if (currentField.field) {
+        return {
+          field,
+          errors: await validators.field(
+            value,
+            getValidatorContext({
+              validator: "field",
+              limit: currentField.field,
+              value,
+              data,
+            })
+          ),
+        };
+      }
+
       return {
         field,
         // Run all validators for a given field
@@ -33,19 +52,20 @@ async function checc(data, checks) {
               )
             )
           )
-          // Handle nested arrays of custom validator
-          // and nested object messages
-        ).flat(Infinity),
+          // Handle nested arrays of custom validator messages
+        ).flat(),
       };
     })
   );
 
   // Transform [{ field: "foo", errors: [] }]
   // into { foo: [] }
-  return arr.reduce(
-    (result, obj) => ({ ...result, [obj.field]: obj.errors }),
-    {}
-  );
+  return arr.reduce((result, obj) => {
+    return {
+      ...result,
+      [obj.field]: obj.errors,
+    };
+  }, {});
 }
 
 module.exports = checc;

@@ -27,20 +27,54 @@ const data = {
   address: {
     city: "a",
     code: "b",
+    street: {
+      name: "a",
+      number: {
+        number: "a",
+        letter: "b",
+      },
+    },
   },
   things: [{ name: "a" }, { name: "b" }],
 };
 
 const checks = {
-  firstName: {
-    minLength: 2,
-  },
-  repeatPassword: {
-    sameAs: "password",
-  },
   username: {
-    maxLength: 12,
+    custom: () => Promise.reject("bad"),
+    minLength: [100, "aaa"],
+  },
+  address: {
+    field: {
+      city: {
+        minLength: 2,
+      },
+      code: {
+        minLength: 2,
+      },
+      street: {
+        field: {
+          number: {
+            field: {
+              number: {
+                minLength: 2,
+              },
+              letter: {
+                minLength: [2, "wrong letter"],
+                maxLength: [0, "wrong length"],
+                custom: [() => Promise.reject("a"), () => Promise.reject("b")],
+              },
+            },
+          },
+          name: {
+            minLength: 2,
+            custom: () => Promise.reject("wrong"),
+          },
+        },
+      },
+    },
   },
 };
 
-checc(data, checks).then(console.log);
+checc(data, checks).then((result) => {
+  console.log(JSON.stringify(result));
+});

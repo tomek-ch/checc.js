@@ -22,12 +22,13 @@ function getValidatorContext({ validator, limit, value, field, data }) {
       field,
     };
   }
+
   // If there is no custom message, use the default one
   const defaultMessage = defaultMessages[validator];
   return {
     limit,
+    // Handle custom default messages
     message:
-      // Handle custom default messages
       typeof defaultMessage === "function"
         ? defaultMessage(limit, field, value)
         : defaultMessage,
@@ -58,7 +59,9 @@ const validators = {
     if (Array.isArray(validator)) {
       // Run all of them
       return Promise.reject(
-        getErrors(Promise.allSettled(validator.map((fn) => fn(value, ctx))))
+        getErrors(
+          await Promise.allSettled(validator.map((fn) => fn(value, ctx)))
+        )
       );
     }
     // Or only one
@@ -91,10 +94,31 @@ const validators = {
   },
   field: async (objToCheck, ctx) => {
     const fieldsToCheck = ctx.limit;
-    return Promise.reject(
-      getErrors(
-        await Promise.allSettled(
-          Object.keys(fieldsToCheck).flatMap((field) =>
+    // Errors for individual fields will be stored here
+    const objErrors = {};
+
+    await Promise.allSettled(
+      Object.keys(fieldsToCheck).flatMap(async (field) => {
+        // Handle validation of deeply nested objects
+        if (fieldsToCheck[field].field) {
+          const error = await validators.field(
+            objToCheck[field],
+            getValidatorContext({
+              validator: "field",
+              limit: fieldsToCheck[field].field,
+              value: objToCheck[field],
+              data: ctx.data,
+            })
+          );
+
+          objErrors[field] = error;
+          return null;
+        }
+
+        // If the field is not a nested object, run validators as usual
+        // and put errors in an array
+        const errors = getErrors(
+          await Promise.allSettled(
             Object.keys(fieldsToCheck[field]).map((check) =>
               validators[check](
                 objToCheck[field],
@@ -108,9 +132,16 @@ const validators = {
               )
             )
           )
-        )
-      )
+        );
+
+        // Flatten multiple custom validator messages
+        objErrors[field] = errors.flat();
+      })
     );
+
+    // Result will look like this
+    // { field: [], nestedObj: { field: [] } }
+    return objErrors;
   },
   optional: () => {},
 };
