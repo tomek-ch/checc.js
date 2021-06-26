@@ -1,6 +1,30 @@
 const { validators, getValidatorContext, getErrors } = require("./setup");
 
-async function checc(data, checks) {
+function removeEmpty(obj) {
+  return Object.keys(obj).reduce((result, key) => {
+    // It is a validated field
+    if (Array.isArray(obj[key])) {
+      // There are errors
+      if (obj[key].length) {
+        return { ...result, [key]: obj[key] };
+      }
+      // There are no errors
+      return result;
+    }
+
+    // It is a nested object
+    // Recursively check all of its properties
+    const nestedObj = removeEmpty(obj[key]);
+    // There are errors somewhere inside the object
+    if (Object.keys(nestedObj).length) {
+      return { ...result, [key]: nestedObj };
+    }
+    // There are no errors insde the object
+    return result;
+  }, {});
+}
+
+async function checc(data, checks, options) {
   // Get every field that was submitted for validation
   const arr = await Promise.all(
     Object.keys(checks).map(async (field) => {
@@ -60,12 +84,23 @@ async function checc(data, checks) {
 
   // Transform [{ field: "foo", errors: [] }]
   // into { foo: [] }
-  return arr.reduce((result, obj) => {
-    return {
-      ...result,
-      [obj.field]: obj.errors,
-    };
-  }, {});
+  const obj = arr
+    // .filter((obj) => Array.isArray(obj.errors) && obj.errors.length)
+    .reduce((result, obj) => {
+      return {
+        ...result,
+        [obj.field]: obj.errors,
+      };
+    }, {});
+
+  // Get rid of fields with no errors
+  const clean = removeEmpty(obj);
+  // Check if any validation failed
+  const isValid = !Object.keys(clean).length;
+  // The keepSchema option determines
+  // whether to return only the errors
+  // or all of the validated fields
+  return { errors: options?.keepSchema ? obj : clean, isValid };
 }
 
 module.exports = checc;

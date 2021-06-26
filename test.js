@@ -40,34 +40,21 @@ const data = {
 
 const checks = {
   username: {
-    custom: () => Promise.reject("bad"),
-    minLength: [100, "aaa"],
+    minLength: 2,
+  },
+  firstName: {
+    minLength: 1,
   },
   address: {
     field: {
-      city: {
-        minLength: 2,
-      },
-      code: {
-        minLength: 2,
-      },
       street: {
         field: {
           number: {
             field: {
-              number: {
-                minLength: 2,
-              },
               letter: {
-                minLength: [2, "wrong letter"],
-                maxLength: [0, "wrong length"],
-                custom: [() => Promise.reject("a"), () => Promise.reject("b")],
+                minLength: 1,
               },
             },
-          },
-          name: {
-            minLength: 2,
-            custom: () => Promise.reject("wrong"),
           },
         },
       },
@@ -75,6 +62,6 @@ const checks = {
   },
 };
 
-checc(data, checks).then((result) => {
+checc(data, checks, { keepSchema: false }).then((result) => {
   console.log(JSON.stringify(result));
 });
