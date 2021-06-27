@@ -36,6 +36,12 @@ const data = {
     },
   },
   things: [{ name: "a" }, { name: "b" }],
+  thing: {
+    things: ["a"],
+    thing: {
+      thing: "a",
+    },
+  },
 };
 
 const checks = {
@@ -52,13 +58,47 @@ const checks = {
           number: {
             field: {
               letter: {
-                minLength: 1,
+                minLength: 0,
+              },
+              number: {
+                minLength: 0,
               },
             },
           },
         },
       },
     },
+  },
+  things: {
+    all: {
+      field: {
+        name: {
+          minLength: 0,
+        },
+      },
+    },
+  },
+  thing: {
+    field: {
+      things: {
+        all: {
+          minLength: 2,
+        },
+      },
+      thing: {
+        field: {
+          thing: {
+            minLength: 2,
+          },
+        },
+      },
+    },
+  },
+  tags: {
+    all: {
+      minLength: 2,
+    },
+    minLength: [5, "there must be at least 5 tags"],
   },
 };
 

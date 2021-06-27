@@ -61,23 +61,29 @@ async function checc(data, checks, options) {
       return {
         field,
         // Run all validators for a given field
-        errors: getErrors(
-          await Promise.allSettled(
-            Object.keys(currentField).map((check) =>
-              validators[check](
-                value,
-                getValidatorContext({
-                  validator: check,
-                  limit: currentField[check],
-                  value,
-                  field,
-                  data,
-                })
+        errors: [
+          // Remove duplicate messages from array validation
+          ...new Set(
+            getErrors(
+              await Promise.allSettled(
+                Object.keys(currentField).map((check) =>
+                  validators[check](
+                    value,
+                    getValidatorContext({
+                      validator: check,
+                      limit: currentField[check],
+                      value,
+                      field,
+                      data,
+                    })
+                  )
+                )
               )
-            )
-          )
-          // Handle nested arrays of custom validator messages
-        ).flat(),
+              // Handle nested arrays of custom validator
+              // and array of objects validation messages
+            ).flat(Infinity)
+          ),
+        ],
       };
     })
   );

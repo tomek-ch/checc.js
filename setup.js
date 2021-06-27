@@ -11,7 +11,14 @@ let defaultMessages = {
   pattern: "Incorrect format",
 };
 
-function getValidatorContext({ validator, limit, value, field, data }) {
+function getValidatorContext({
+  validator,
+  limit,
+  value,
+  field,
+  data,
+  returnArr,
+}) {
   // Check if custom message was provided
   // And if it is not an array of custom validators
   if (Array.isArray(limit) && validator !== "custom") {
@@ -20,6 +27,7 @@ function getValidatorContext({ validator, limit, value, field, data }) {
       message: limit[1],
       data,
       field,
+      returnArr,
     };
   }
 
@@ -34,6 +42,7 @@ function getValidatorContext({ validator, limit, value, field, data }) {
         : defaultMessage,
     data,
     field,
+    returnArr,
   };
 }
 
@@ -84,6 +93,7 @@ const validators = {
                   value: item,
                   field: ctx.field,
                   data: ctx.data,
+                  returnArr: true,
                 })
               )
             )
@@ -94,6 +104,32 @@ const validators = {
   },
   field: async (objToCheck, ctx) => {
     const fieldsToCheck = ctx.limit;
+
+    // Handle validation of array of objects
+    if (ctx.returnArr) {
+      return Promise.reject(
+        getErrors(
+          await Promise.allSettled(
+            Object.keys(fieldsToCheck).map((field) =>
+              Object.keys(fieldsToCheck[field]).map((check) =>
+                validators[check](
+                  objToCheck[field],
+                  getValidatorContext({
+                    validator: check,
+                    limit: fieldsToCheck[field][check],
+                    value: objToCheck[field],
+                    field,
+                    data: ctx.data,
+                    returnArr: true,
+                  })
+                )
+              )
+            )
+          )
+        )
+      );
+    }
+
     // Errors for individual fields will be stored here
     const objErrors = {};
 
