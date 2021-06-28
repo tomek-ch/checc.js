@@ -65,7 +65,7 @@ const validators = {
     if (!Array.isArray(val) && typeof val !== "string") {
       return Promise.reject(context.message);
     }
-    if (str.length < context.limit) {
+    if (val.length < context.limit) {
       return Promise.reject(context.message);
     }
   },
