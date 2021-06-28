@@ -5,15 +5,13 @@ function getErrors(arrOfPromises) {
 }
 
 let defaultMessages = {
-  minLength: (limit, field, val) =>
-    `Minimum length of ${field} is ${limit}. "${val}" is too short`,
-  maxLength: "Too long",
+  minLength: (limit) => `Must be at least ${limit} characters`,
+  maxLength: (limit) => `Must be less than ${limit} characters`,
   pattern: "Incorrect format",
   type: (limit) =>
     // Check if multiple types were provided
-    `Field must be of type ${limit.in ? limit.in.join(", ") : limit}`,
-  isArray: (shouldBeArray) =>
-    `Field ${shouldBeArray ? "must" : "can't"} be an array`,
+    `Must be of type ${limit.in ? limit.in.join(", ") : limit}`,
+  isArray: (shouldBeArray) => `${shouldBeArray ? "Must" : "Can't"} be an array`,
   min: (min) => `Must be at least ${min}`,
   max: (max) => `Must be lower than ${max}`,
 };
