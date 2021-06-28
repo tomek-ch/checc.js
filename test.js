@@ -43,15 +43,12 @@ const data = {
     },
   },
   obj: "aa",
+  abc: 1,
 };
 
 const checks = {
-  obj: {
-    field: {
-      name: {
-        minLength: 2,
-      },
-    },
+  abc: {
+    type: [{ in: ["string", "object"] }, "bad type"],
   },
 };
 

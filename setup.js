@@ -9,6 +9,9 @@ let defaultMessages = {
     `Minimum length of ${field} is ${limit}. "${val}" is too short`,
   maxLength: "Too long",
   pattern: "Incorrect format",
+  type: (limit) =>
+    // Check if multiple types were provided
+    `Field must be of type ${limit.in ? limit.in.join(", ") : limit}`,
 };
 
 function getValidatorContext({
@@ -47,6 +50,16 @@ function getValidatorContext({
 }
 
 const validators = {
+  type: (val, context) => {
+    // Check if multiple types were provided
+    if (context.limit.in) {
+      if (!context.limit.in.includes(typeof val)) {
+        return Promise.reject(context.message);
+      }
+    } else if (typeof val !== context.limit) {
+      return Promise.reject(context.message);
+    }
+  },
   minLength: (val, context) => {
     // Fail validation if value is not a string or array
     if (!Array.isArray(val) && typeof val !== "string") {
