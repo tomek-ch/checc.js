@@ -12,6 +12,8 @@ let defaultMessages = {
   type: (limit) =>
     // Check if multiple types were provided
     `Field must be of type ${limit.in ? limit.in.join(", ") : limit}`,
+  isArray: (shouldBeArray) =>
+    `Field ${shouldBeArray ? "must" : "can't"} be an array`,
 };
 
 function getValidatorContext({
@@ -57,6 +59,14 @@ const validators = {
         return Promise.reject(context.message);
       }
     } else if (typeof val !== context.limit) {
+      return Promise.reject(context.message);
+    }
+  },
+  isArray: (val, context) => {
+    const shouldBeArray = context.limit;
+    const isArray = Array.isArray(val);
+
+    if (isArray !== shouldBeArray) {
       return Promise.reject(context.message);
     }
   },

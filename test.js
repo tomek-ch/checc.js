@@ -23,7 +23,6 @@ const data = {
   password: "123",
   repeatPassword: "1234",
   email: "bob@bob.com",
-  tags: ["1", "2", "42aaaaaaaaaaaaaaaa"],
   address: {
     city: "a",
     code: "b",
@@ -42,13 +41,16 @@ const data = {
       thing: "a",
     },
   },
-  obj: "aa",
-  abc: 1,
+  tags: ["a"],
 };
 
 const checks = {
-  abc: {
-    type: [{ in: ["string", "object"] }, "bad type"],
+  tags: {
+    isArray: true,
+    minLength: [1, "Please provide at least 1 tag"],
+    all: {
+      minLength: [1, "Each tag must be at least 1 character long"],
+    },
   },
 };
 
