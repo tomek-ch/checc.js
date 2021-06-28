@@ -100,6 +100,10 @@ const validators = {
     return validator(value, ctx);
   },
   all: async (items, ctx) => {
+    // Skip validation if it is not an array
+    if (!Array.isArray(items)) {
+      return null;
+    }
     // These are the validators that will run on every item in the array
     const checks = ctx.limit;
     return Promise.reject(
