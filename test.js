@@ -43,12 +43,14 @@ const data = {
   },
   tags: ["a"],
   number: 100,
+  age: 20,
 };
 
 const checks = {
-  number: {
-    min: 1000,
-    max: 2000,
+  age: {
+    optional: [0, undefined, null],
+    type: "number",
+    min: 20,
   },
 };
 

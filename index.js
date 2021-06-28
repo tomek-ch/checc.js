@@ -31,12 +31,26 @@ async function checc(data = {}, checks, options) {
       const currentField = checks[field];
       const value = data[field];
 
-      // Don't validate optional fields that are undefined
-      if (currentField.optional && value === undefined) {
-        return {
-          field,
-          errors: [],
-        };
+      // Skip validation for optional fields
+      const { optional } = currentField;
+      if (optional) {
+        // Check if custom ignored values were provided
+        if (Array.isArray(optional)) {
+          // Check if it's one of these values
+          if (optional.includes(value)) {
+            return {
+              field,
+              errors: [],
+            };
+          }
+          // If no custom ignored values were provided,
+          // check if the value is undefined
+        } else if (value === undefined) {
+          return {
+            field,
+            errors: [],
+          };
+        }
       }
 
       // If it is an object that is being validated,
