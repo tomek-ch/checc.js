@@ -85,13 +85,15 @@ const validators = {
     if (!Array.isArray(val) && typeof val !== "string") {
       return null;
     }
-    if (str.length > context.limit) {
+    if (val.length > context.limit) {
       return Promise.reject(context.message);
     }
   },
   pattern: (val, context) => {
-    // Test an empty string if the value is of different type
-    if (!context.limit.test(typeof val === "string" ? val : "")) {
+    if (typeof val !== "string") {
+      return null;
+    }
+    if (!context.limit.test(val)) {
       return Promise.reject(context.message);
     }
   },
