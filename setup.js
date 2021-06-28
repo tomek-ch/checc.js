@@ -14,6 +14,8 @@ let defaultMessages = {
     `Field must be of type ${limit.in ? limit.in.join(", ") : limit}`,
   isArray: (shouldBeArray) =>
     `Field ${shouldBeArray ? "must" : "can't"} be an array`,
+  min: (min) => `Must be at least ${min}`,
+  max: (max) => `Must be lower than ${max}`,
 };
 
 function getValidatorContext({
@@ -92,6 +94,22 @@ const validators = {
   pattern: (val, context) => {
     // Test an empty string if the value is of different type
     if (!context.limit.test(typeof val === "string" ? val : "")) {
+      return Promise.reject(context.message);
+    }
+  },
+  min: (val, context) => {
+    if (typeof val !== "number") {
+      return null;
+    }
+    if (val < context.limit) {
+      return Promise.reject(context.message);
+    }
+  },
+  max: (val, context) => {
+    if (typeof val !== "number") {
+      return null;
+    }
+    if (val > context.limit) {
       return Promise.reject(context.message);
     }
   },

@@ -42,15 +42,13 @@ const data = {
     },
   },
   tags: ["a"],
+  number: 100,
 };
 
 const checks = {
-  tags: {
-    isArray: true,
-    minLength: [1, "Please provide at least 1 tag"],
-    all: {
-      minLength: [1, "Each tag must be at least 1 character long"],
-    },
+  number: {
+    min: 1000,
+    max: 2000,
   },
 };
 
