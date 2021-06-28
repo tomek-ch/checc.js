@@ -73,9 +73,9 @@ const validators = {
     }
   },
   minLength: (val, context) => {
-    // Fail validation if value is not a string or array
+    // Skip validation for bad types
     if (!Array.isArray(val) && typeof val !== "string") {
-      return Promise.reject(context.message);
+      return null;
     }
     if (val.length < context.limit) {
       return Promise.reject(context.message);
