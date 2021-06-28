@@ -38,7 +38,7 @@ function getValidatorContext({
     // Handle custom default messages
     message:
       typeof defaultMessage === "function"
-        ? defaultMessage(limit, field, value)
+        ? defaultMessage(limit, field, value || "")
         : defaultMessage,
     data,
     field,
@@ -47,18 +47,28 @@ function getValidatorContext({
 }
 
 const validators = {
-  minLength: (str, context) => {
+  minLength: (val, context) => {
+    // Fail validation if value is not a string or array
+    if (!Array.isArray(val) && typeof val !== "string") {
+      return Promise.reject(context.message);
+    }
     if (str.length < context.limit) {
       return Promise.reject(context.message);
     }
   },
-  maxLength: (str, context) => {
+  maxLength: (val, context) => {
+    // Do not validate if the type of value
+    // is other than string or array
+    if (!Array.isArray(val) && typeof val !== "string") {
+      return null;
+    }
     if (str.length > context.limit) {
       return Promise.reject(context.message);
     }
   },
-  pattern: (str, context) => {
-    if (!context.limit.test(str)) {
+  pattern: (val, context) => {
+    // Test an empty string if the value is of different type
+    if (!context.limit.test(typeof val === "string" ? val : "")) {
       return Promise.reject(context.message);
     }
   },
@@ -102,7 +112,9 @@ const validators = {
       )
     );
   },
-  field: async (objToCheck, ctx) => {
+  field: async (val, ctx) => {
+    // Handle invalid types
+    const objToCheck = typeof val !== "object" || val === null ? {} : val;
     const fieldsToCheck = ctx.limit;
 
     // Handle validation of array of objects

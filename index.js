@@ -24,7 +24,7 @@ function removeEmpty(obj) {
   }, {});
 }
 
-async function checc(data, checks, options) {
+async function checc(data = {}, checks, options) {
   // Get every field that was submitted for validation
   const arr = await Promise.all(
     Object.keys(checks).map(async (field) => {

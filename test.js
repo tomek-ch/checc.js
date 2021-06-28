@@ -42,63 +42,16 @@ const data = {
       thing: "a",
     },
   },
+  obj: "aa",
 };
 
 const checks = {
-  username: {
-    minLength: 2,
-  },
-  firstName: {
-    minLength: 1,
-  },
-  address: {
+  obj: {
     field: {
-      street: {
-        field: {
-          number: {
-            field: {
-              letter: {
-                minLength: 0,
-              },
-              number: {
-                minLength: 0,
-              },
-            },
-          },
-        },
+      name: {
+        minLength: 2,
       },
     },
-  },
-  things: {
-    all: {
-      field: {
-        name: {
-          minLength: 0,
-        },
-      },
-    },
-  },
-  thing: {
-    field: {
-      things: {
-        all: {
-          minLength: 2,
-        },
-      },
-      thing: {
-        field: {
-          thing: {
-            minLength: 2,
-          },
-        },
-      },
-    },
-  },
-  tags: {
-    all: {
-      minLength: 2,
-    },
-    minLength: [5, "there must be at least 5 tags"],
   },
 };
 
