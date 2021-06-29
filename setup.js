@@ -167,7 +167,7 @@ const validators = {
       return Promise.reject(
         getErrors(
           await Promise.allSettled(
-            Object.keys(fieldsToCheck).map((field) =>
+            Object.keys(fieldsToCheck).flatMap((field) =>
               Object.keys(fieldsToCheck[field]).map((check) =>
                 validators[check](
                   objToCheck[field],

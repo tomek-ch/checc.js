@@ -37,15 +37,18 @@ const data = {
   tags: ["a"],
   number: 100,
   age: 20,
+  users: [{}],
 };
 
 const checks = {
-  address: {
-    field: {
-      opt: {
-        type: "string",
-        minLength: 2,
-        optional: true,
+  users: {
+    all: {
+      field: {
+        name: {
+          type: "string",
+          minLength: 2,
+          optional: true,
+        },
       },
     },
   },
