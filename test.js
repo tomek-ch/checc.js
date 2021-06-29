@@ -55,5 +55,6 @@ const checks = {
 };
 
 checc(data, checks, { keepSchema: true }).then((result) => {
-  console.log(JSON.stringify(result));
+  // console.log(JSON.stringify(result));
+  console.log(result);
 });

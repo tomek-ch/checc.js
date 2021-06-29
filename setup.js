@@ -167,8 +167,26 @@ const validators = {
       return Promise.reject(
         getErrors(
           await Promise.allSettled(
-            Object.keys(fieldsToCheck).flatMap((field) =>
-              Object.keys(fieldsToCheck[field]).map((check) =>
+            Object.keys(fieldsToCheck).flatMap((field) => {
+              const { optional } = fieldsToCheck[field];
+              if (optional) {
+                // Skip validation for optional fields
+                if (optional) {
+                  // Check if custom ignored values were provided
+                  if (Array.isArray(optional)) {
+                    // Check if it's one of these values
+                    if (optional.includes(objToCheck[field])) {
+                      return [];
+                    }
+                    // If no custom ignored values were provided,
+                    // check if the value is undefined
+                  } else if (objToCheck[field] === undefined) {
+                    return [];
+                  }
+                }
+              }
+              // console.log({ objToCheck, field, fieldsToCheck });
+              return Object.keys(fieldsToCheck[field]).map((check) =>
                 validators[check](
                   objToCheck[field],
                   getValidatorContext({
@@ -180,8 +198,8 @@ const validators = {
                     returnArr: true,
                   })
                 )
-              )
-            )
+              );
+            })
           )
         )
       );
