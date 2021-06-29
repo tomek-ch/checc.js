@@ -2,7 +2,12 @@ const checc = require(".");
 
 function checcMiddleware(field, schema, options) {
   return async (req, res, next) => {
-    req.checc = await checc(req[field], schema, options);
+    // Make sure not to overwrite the results of previous validations
+    if (!req.checc) {
+      req.checc = {};
+    }
+
+    req.checc[field] = await checc(req[field], schema, options);
     next();
   };
 }
