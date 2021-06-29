@@ -9,8 +9,8 @@ config({
 
   validators: {
     sameAs: [
-      (val, { limit, message }) =>
-        val === limit ? null : Promise.reject(message),
+      (val, { limit, message, data }) =>
+        val === data[limit] ? null : Promise.reject(message),
       (limit, field, val) => `${field} is different than ${limit}`,
     ],
   },
@@ -34,26 +34,23 @@ const data = {
       },
     },
   },
-  things: [{ name: "a" }, { name: "b" }],
-  thing: {
-    things: ["a"],
-    thing: {
-      thing: "a",
-    },
-  },
   tags: ["a"],
   number: 100,
   age: 20,
 };
 
 const checks = {
-  age: {
-    optional: [0, undefined, null],
-    type: "number",
-    min: 20,
+  address: {
+    field: {
+      opt: {
+        type: "string",
+        minLength: 2,
+        optional: true,
+      },
+    },
   },
 };
 
-checc(data, checks, { keepSchema: false }).then((result) => {
+checc(data, checks, { keepSchema: true }).then((result) => {
   console.log(JSON.stringify(result));
 });

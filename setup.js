@@ -192,6 +192,24 @@ const validators = {
 
     await Promise.allSettled(
       Object.keys(fieldsToCheck).flatMap(async (field) => {
+        // Skip validation for optional fields
+        const { optional } = fieldsToCheck[field];
+        if (optional) {
+          // Check if custom ignored values were provided
+          if (Array.isArray(optional)) {
+            // Check if it's one of these values
+            if (optional.includes(objToCheck[field])) {
+              objErrors[field] = [];
+              return null;
+            }
+            // If no custom ignored values were provided,
+            // check if the value is undefined
+          } else if (objToCheck[field] === undefined) {
+            objErrors[field] = [];
+            return null;
+          }
+        }
+
         // Handle validation of deeply nested objects
         if (fieldsToCheck[field].field) {
           const error = await validators.field(
