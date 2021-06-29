@@ -14,6 +14,10 @@ config({
       (limit, field, val) => `${field} is different than ${limit}`,
     ],
   },
+
+  customCtx: {
+    answer: 42,
+  },
 });
 
 const data = {
@@ -41,16 +45,8 @@ const data = {
 };
 
 const checks = {
-  users: {
-    all: {
-      field: {
-        name: {
-          type: "string",
-          minLength: 2,
-          optional: true,
-        },
-      },
-    },
+  username: {
+    custom: (str, { answer }) => str !== answer && Promise.reject("not 42"),
   },
 };
 

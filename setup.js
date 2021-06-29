@@ -4,6 +4,8 @@ function getErrors(arrOfPromises) {
     .map((p) => p.reason);
 }
 
+let customCtx = {};
+
 let defaultMessages = {
   minLength: (limit) => `Must be at least ${limit} characters`,
   maxLength: (limit) => `Must be less than ${limit} characters`,
@@ -28,6 +30,7 @@ function getValidatorContext({
   // And if it is not an array of custom validators
   if (Array.isArray(limit) && validator !== "custom") {
     return {
+      ...customCtx,
       limit: limit[0],
       message: limit[1],
       data,
@@ -39,6 +42,7 @@ function getValidatorContext({
   // If there is no custom message, use the default one
   const defaultMessage = defaultMessages[validator];
   return {
+    ...customCtx,
     limit,
     // Handle custom default messages
     message:
@@ -276,6 +280,7 @@ const validators = {
 };
 
 function config(options) {
+  // Custom messages
   if (options.defaultMessages) {
     defaultMessages = {
       ...defaultMessages,
@@ -283,11 +288,20 @@ function config(options) {
     };
   }
 
+  // Custom validators
   if (options.validators) {
     Object.keys(options.validators).forEach((validatorName) => {
       validators[validatorName] = options.validators[validatorName][0];
       defaultMessages[validatorName] = options.validators[validatorName][1];
     });
+  }
+
+  // Custom context
+  if (options.customCtx) {
+    customCtx = {
+      ...customCtx,
+      ...options.customCtx,
+    };
   }
 }
 
