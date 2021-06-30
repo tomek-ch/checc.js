@@ -1,4 +1,4 @@
-# Checc-js
+# Checc.js
 
 A portable and extensible library for data validation in JavaScript.
 
