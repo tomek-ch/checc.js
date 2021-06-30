@@ -110,17 +110,17 @@ const schema = {
     field: {
       address: {
         field: {
-		  street: {
-		    type: 'string',
-		  },
-		  city: {
-		    type: 'string',
-		  },
+          street: {
+            type: 'string',
+          },
+          city: {
+            type: 'string',
+          },
         },
       },
-	  username: {
-	    type: 'string',
-	  },
+      username: {
+        type: 'string',
+      },
     },
   },
 };
