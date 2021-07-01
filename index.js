@@ -104,14 +104,12 @@ async function checc(data = {}, checks, options) {
 
   // Transform [{ field: "foo", errors: [] }]
   // into { foo: [] }
-  const obj = arr
-    // .filter((obj) => Array.isArray(obj.errors) && obj.errors.length)
-    .reduce((result, obj) => {
-      return {
-        ...result,
-        [obj.field]: obj.errors,
-      };
-    }, {});
+  const obj = arr.reduce((result, obj) => {
+    return {
+      ...result,
+      [obj.field]: obj.errors,
+    };
+  }, {});
 
   // Get rid of fields with no errors
   const clean = removeEmpty(obj);

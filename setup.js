@@ -189,7 +189,7 @@ const validators = {
                   }
                 }
               }
-              // console.log({ objToCheck, field, fieldsToCheck });
+
               return Object.keys(fieldsToCheck[field]).map((check) =>
                 validators[check](
                   objToCheck[field],
