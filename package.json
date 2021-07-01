@@ -1,0 +1,28 @@
+{
+  "name": "checc",
+  "version": "0.1.0",
+  "description": "Portable and extensible data validation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomek-ch/checc.js.git"
+  },
+  "keywords": [
+    "schema",
+    "form",
+    "data",
+    "validation",
+    "front-end",
+    "backend",
+    "middleware"
+  ],
+  "author": "Tomasz Chmielnicki",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tomek-ch/checc.js/issues"
+  },
+  "homepage": "https://github.com/tomek-ch/checc.js#readme"
+}
