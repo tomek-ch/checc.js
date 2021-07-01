@@ -1,6 +1,6 @@
 # Checc.js
 
-A portable and extensible library for data validation in JavaScript.
+A portable and extensible library for data validation in JavaScript. Offers a declarative API built with code reuse in mind.
 
 - [React example](https://github.com/tomek-ch/checc-example-react)
 - [Express example](https://github.com/tomek-ch/checc-example-express)
@@ -60,7 +60,7 @@ const schema = {
 };
 ```
 
-The first argument passed to a validator is the value of the field that is being validated (in this case `repeatPassword`). The second argument is a context object from which you can access all of the data. To fail a check, return a rejected `Promise ` and pass your error message to it.
+The first argument passed to a validator is the value of the field that is being validated (in this case `repeatPassword`). The second argument is a context object from which you can access all of the data. To fail a check, return a rejected `Promise` and pass your error message to it.
 
 ### Multiple custom validators
 
