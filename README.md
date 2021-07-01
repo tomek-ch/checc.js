@@ -18,6 +18,22 @@ A portable and extensible library for data validation in JavaScript. Offers a de
 
 ## Basics
 
+### Installation
+
+Npm:
+
+```
+npm i checc
+```
+
+Yarn:
+
+```
+yarn add checc
+```
+
+### Usage
+
 To perform validation, the asynchronous `checc` function is used. It accepts an object of data, on which the checks will be performed, and a validation schema.
 
 ```
