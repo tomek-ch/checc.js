@@ -1,6 +1,6 @@
 {
   "name": "checc",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Portable and extensible data validation",
   "main": "index.js",
   "scripts": {

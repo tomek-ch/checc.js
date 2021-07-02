@@ -24,7 +24,7 @@ function removeEmpty(obj) {
   }, {});
 }
 
-async function checc(data = {}, checks, options) {
+async function checc(data = {}, checks, options = {}) {
   // Get every field that was submitted for validation
   const arr = await Promise.all(
     Object.keys(checks).map(async (field) => {
@@ -118,7 +118,7 @@ async function checc(data = {}, checks, options) {
   // The keepSchema option determines
   // whether to return only the errors
   // or all of the validated fields
-  return { errors: options?.keepSchema ? obj : clean, isValid };
+  return { errors: options.keepSchema ? obj : clean, isValid };
 }
 
 module.exports = checc;
