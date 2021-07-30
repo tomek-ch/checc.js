@@ -4,6 +4,7 @@ A portable and extensible library for data validation in JavaScript. Offers a de
 
 - [React example](https://github.com/tomek-ch/checc-example-react)
 - [Express example](https://github.com/tomek-ch/checc-example-express)
+- [Documentation](https://checcjs.gatsbyjs.io/)
 
 ## Table of contents
 
